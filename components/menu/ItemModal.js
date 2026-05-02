@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useCart } from "../../context/CartContext";
+import Image from "next/image";
 
 export default function ItemModal({ item, onClose }) {
   const { addItem } = useCart();
@@ -14,10 +15,10 @@ export default function ItemModal({ item, onClose }) {
   useEffect(() => {
     if (item.customizationGroups) {
       const initial = {};
-      item.customizationGroups.forEach((g) => {
-        // Find existing selected, or maybe leave it blank for now
+      item.modifier_groups?.forEach((group) => {
+        // ...
       });
-      setSelectedOptions(initial);
+      setTimeout(() => setSelectedOptions(initial), 0);
     }
   }, [item]);
 
@@ -118,7 +119,7 @@ export default function ItemModal({ item, onClose }) {
         </button>
 
         <div className="h-64 sm:h-80 w-full bg-cream-light relative shrink-0">
-          {item.image_url && <img src={item.image_url} alt={item.name} className="w-full h-full object-cover" />}
+          {item.image_url && <Image src={item.image_url} alt={item.name} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" priority />}
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6 pt-12">
             <h2 className="text-3xl font-bold text-white mb-1">{item.name}</h2>
             <p className="text-gold font-bold text-xl">₱{item.price}</p>

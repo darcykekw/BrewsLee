@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import Button from "../../../../components/ui/Button";
 import Spinner from "../../../../components/ui/Spinner";
+import toast from "react-hot-toast";
 
 export default function CategoriesPage() {
   const [categories, setCategories] = useState([]);
@@ -22,7 +23,10 @@ export default function CategoriesPage() {
   };
 
   useEffect(() => {
-    fetchCategories();
+    const loadData = async () => {
+      await fetchCategories();
+    };
+    loadData();
   }, []);
 
   const toggleActive = async (id, currentStatus) => {
@@ -45,7 +49,7 @@ export default function CategoriesPage() {
     <div className="p-8 max-w-5xl mx-auto">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-brown-dark">Menu Categories</h1>
-        <Button onClick={() => alert("Add Modal Pending")}>+ Add Category</Button>
+        <Button onClick={() => toast("Add Category modal pending")}>+ Add Category</Button>
       </div>
       <div className="bg-white shadow rounded-lg overflow-hidden">
         <table className="min-w-full divide-y divide-gray-200">

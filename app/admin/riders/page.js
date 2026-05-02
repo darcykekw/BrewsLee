@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Button from "../../../components/ui/Button";
 import Spinner from "../../../components/ui/Spinner";
+import toast from "react-hot-toast";
 
 export default function AdminRidersPage() {
   const [riders, setRiders] = useState([]);
@@ -36,7 +37,9 @@ export default function AdminRidersPage() {
   };
 
   useEffect(() => {
-    fetchRiders();
+    setTimeout(() => {
+      fetchRiders();
+    }, 0);
   }, []);
 
   const openAddModal = () => {
@@ -65,7 +68,7 @@ export default function AdminRidersPage() {
     setFormLoading(true);
 
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      toast.error("Passwords do not match!");
       setFormLoading(false);
       return;
     }
@@ -98,9 +101,10 @@ export default function AdminRidersPage() {
         });
       }
       setModalOpen(false);
+      toast.success("Rider saved successfully!");
       fetchRiders();
     } catch (err) {
-      alert("Error saving rider.");
+      toast.error("Error saving rider.");
     } finally {
       setFormLoading(false);
     }

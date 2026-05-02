@@ -24,7 +24,10 @@ export default function CustomizationsPage({ params }) {
   };
 
   useEffect(() => {
-    fetchCustomizations();
+    const load = async () => {
+      await fetchCustomizations();
+    };
+    load();
   }, [id]);
 
   const addGroup = async () => {

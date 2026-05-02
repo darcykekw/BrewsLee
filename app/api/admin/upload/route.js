@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { supabaseServer } from "../../../../lib/supabaseServer";
 import { getSession } from "../../../../lib/getSession";
 import { v4 as uuidv4 } from "uuid";
+import sharp from "sharp";
 
 // This expects formData with a File object
 export async function POST(request) {
@@ -27,6 +28,16 @@ export async function POST(request) {
       return NextResponse.json({ error: "File exceeds 5MB limit" }, { status: 400 });
     }
 
+    let warning;
+    try {
+      const metadata = await sharp(buffer).metadata();
+      if (metadata.width > 800) {
+        warning = "Warning: Image width exceeds 800px. Consider resizing for better performance.";
+      }
+    } catch (err) {
+      console.error("Sharp error", err);
+    }
+
     const fileExt = file.name.split('.').pop();
     const fileName = `${uuidv4()}.${fileExt}`;
 
@@ -47,7 +58,7 @@ export async function POST(request) {
       .from("menu-items")
       .getPublicUrl(fileName);
 
-    return NextResponse.json({ url: publicUrlData.publicUrl });
+    return NextResponse.json({ url: publicUrlData.publicUrl, warning });
   } catch (e) {
     return NextResponse.json({ error: e.message }, { status: 500 });
   }

@@ -1,24 +1,33 @@
 import "../styles/globals.css";
 import Providers from "../components/Providers";
-import Navbar from "../components/layout/Navbar";
-import Footer from "../components/layout/Footer";
+import { ConditionalNav } from "../components/layout/ConditionalNav";
 
 export const metadata = {
-  title: "Coffee Shop",
-  description: "Online Ordering & Delivery System",
+  title: "Brews Lee",
+  description: "Freshly brewed and crafted for you. Order online for delivery or pickup.",
+  openGraph: {
+    title: "Brews Lee",
+    description: "Freshly brewed and crafted for you. Order online for delivery or pickup.",
+    url: "https://brewslee.com",
+    siteName: "Brews Lee",
+    locale: "en_US",
+    type: "website",
+  },
 };
+
+import { Toaster } from 'react-hot-toast';
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body>
+    <html lang="en" suppressHydrationWarning>
+      <body className="text-gray-900 dark:text-gray-100 transition-colors duration-300">
         <Providers>
           <div className="flex flex-col min-h-screen">
-            <Navbar />
+            <ConditionalNav />
             <main className="flex-grow">{children}</main>
-            <Footer />
           </div>
         </Providers>
+        <Toaster position="top-center" />
       </body>
     </html>
   );

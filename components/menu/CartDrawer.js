@@ -2,10 +2,12 @@
 
 import { useCart } from "../../context/CartContext";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export default function CartDrawer({ isOpen, onClose }) {
   const { state, removeItem, updateQuantity, getTotal, clearCart } = useCart();
   const router = useRouter();
+  const { data: session } = useSession();
 
   if (!isOpen) return null;
 
@@ -94,16 +96,29 @@ export default function CartDrawer({ isOpen, onClose }) {
               <span className="font-bold text-2xl text-brown-dark">₱{total}</span>
             </div>
             
-            <button 
-              onClick={() => {
-                onClose();
-                router.push("/checkout");
-              }}
-              className="w-full bg-gold hover:bg-yellow-500 text-brown-dark font-bold text-lg py-4 rounded-xl shadow-lg transition-transform active:scale-95 flex justify-center items-center gap-3 tracking-wider group"
-            >
-              Checkout
-              <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-            </button>
+            {session ? (
+              <button 
+                onClick={() => {
+                  onClose();
+                  router.push("/checkout");
+                }}
+                className="w-full bg-gold hover:bg-yellow-500 text-brown-dark font-bold text-lg py-4 rounded-xl shadow-lg transition-transform active:scale-95 flex justify-center items-center gap-3 tracking-wider group"
+              >
+                Checkout
+                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+              </button>
+            ) : (
+              <button 
+                onClick={() => {
+                  onClose();
+                  router.push("/login");
+                }}
+                className="w-full bg-brown hover:bg-brown-dark text-white font-bold text-lg py-4 rounded-xl shadow-lg transition-transform active:scale-95 flex justify-center items-center gap-3 tracking-wider group"
+              >
+                Sign in to Order
+                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
+              </button>
+            )}
           </div>
         )}
       </div>

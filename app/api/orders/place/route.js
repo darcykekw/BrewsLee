@@ -12,9 +12,16 @@ export async function POST(req) {
       return NextResponse.json({ error: "Cart is empty" }, { status: 400 });
     }
 
+    if (deliveryMethod !== "delivery" && deliveryMethod !== "pickup") {
+      return NextResponse.json({ error: "Invalid delivery method" }, { status: 400 });
+    }
+
     const session = await getServerSession(authOptions);
-    const profileId = session?.user?.id || null;
-    const guestToken = profileId ? null : crypto.randomUUID();
+    const profileId = session?.user?.id;
+
+    if (!profileId) {
+      return NextResponse.json({ error: "Unauthorized. Please sign in to order." }, { status: 401 });
+    }
 
     // Calculate total from cartItems
     const itemsTotal = cartItems.reduce((acc, item) => acc + item.itemSubtotal, 0);
@@ -40,6 +47,9 @@ export async function POST(req) {
             label: addressObj.label
          });
       } else if (addressData) {
+         if (!addressData.fullAddress || addressData.fullAddress.trim() === "") {
+            return NextResponse.json({ error: "Full address is required for delivery" }, { status: 400 });
+         }
          finalAddressSnapshot = JSON.stringify({
             full_address: addressData.fullAddress,
             floor_unit: addressData.floorUnit,
@@ -76,7 +86,6 @@ export async function POST(req) {
       .from("orders")
       .insert({
         profile_id: profileId,
-        guest_token: guestToken,
         status: "pending",
         delivery_method: deliveryMethod,
         address_snapshot: finalAddressSnapshot,
@@ -110,14 +119,12 @@ export async function POST(req) {
       .insert({
         order_id: order.id,
         status: "pending",
-        changed_by: profileId || "guest"
+        changed_by: profileId
       });
 
     if (logError) throw logError;
 
-    const returnToken = profileId ? order.id : guestToken;
-
-    return NextResponse.json({ success: true, orderToken: returnToken });
+    return NextResponse.json({ success: true, orderToken: order.id });
 
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });

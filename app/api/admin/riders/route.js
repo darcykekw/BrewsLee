@@ -1,7 +1,13 @@
 import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/authOptions";
 import { supabaseServer } from "@/lib/supabaseServer";
 
 export async function GET() {
+  const session = await getServerSession(authOptions);
+  if (!session || session.user.role !== "admin") {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   try {
     const { data: riders, error } = await supabaseServer
       .from("riders")
@@ -48,6 +54,10 @@ export async function GET() {
 }
 
 export async function POST(req) {
+  const session = await getServerSession(authOptions);
+  if (!session || session.user.role !== "admin") {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   try {
     const body = await req.json();
     const { name, username, password, contact_number, photo_url } = body;

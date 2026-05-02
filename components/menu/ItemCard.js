@@ -1,6 +1,8 @@
 "use client";
 
-export default function ItemCard({ item, onOpenModal }) {
+import Image from "next/image";
+
+export default function ItemCard({ item, onOpenModal, isFavorite, onToggleFavorite }) {
   const handleCardClick = (e) => {
     // Prevent opening modal if clicking specific action buttons like favorite
     if (e.target.tagName !== "BUTTON" && !e.target.closest('button')) {
@@ -15,7 +17,7 @@ export default function ItemCard({ item, onOpenModal }) {
     >
       <div className="relative h-48 w-full bg-gray-100">
         {item.image_url ? (
-          <img src={item.image_url} alt={item.name} className="w-full h-full object-cover" />
+          <Image src={item.image_url} alt={item.name} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
         ) : (
            <div className="w-full h-full flex items-center justify-center text-gray-400">No Image</div>
         )}
@@ -32,15 +34,29 @@ export default function ItemCard({ item, onOpenModal }) {
           </div>
         )}
 
-        {/* Favorite Button placeholder */}
-        <button 
-          onClick={(e) => { e.stopPropagation(); /* TODO favorites logic */ }}
-          className="absolute top-3 right-3 p-1.5 bg-white/80 hover:bg-white backdrop-blur rounded-full shadow-sm transition"
-        >
-           <svg className="w-5 h-5 text-gray-400 hover:text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-           </svg>
-        </button>
+        {/* Favorite Button */}
+        {onToggleFavorite && (
+          <button 
+            onClick={(e) => { 
+                e.stopPropagation(); 
+                onToggleFavorite(); 
+            }}
+            className="absolute top-3 right-3 p-1.5 bg-white/80 hover:bg-white backdrop-blur rounded-full shadow-sm transition"
+          >
+             <svg 
+               className={`w-5 h-5 transition-colors ${isFavorite ? 'text-red-500 fill-current' : 'text-gray-400 hover:text-red-500'}`} 
+               fill={isFavorite ? "currentColor" : "none"} 
+               stroke="currentColor" 
+               viewBox="0 0 24 24"
+             >
+               {isFavorite ? (
+                 <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+               ) : (
+                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+               )}
+             </svg>
+          </button>
+        )}
       </div>
 
       <div className="p-4 flex-1 flex flex-col">
@@ -48,7 +64,7 @@ export default function ItemCard({ item, onOpenModal }) {
         <p className="text-sm text-gray-500 flex-1 line-clamp-2">{item.description}</p>
         
         <div className="mt-4 flex items-center justify-between">
-          <span className="font-bold text-brown-dark">₱{item.price}</span>
+          <span className="font-bold text-brown-dark">â‚±{item.price}</span>
           <button 
             disabled={!item.is_available}
             onClick={(e) => { e.stopPropagation(); onOpenModal(item); }}

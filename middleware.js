@@ -21,7 +21,7 @@ export async function middleware(request) {
     }
   }
   
-  if (pathname.startsWith('/profile') && !isAuthRoute) {
+  if ((pathname.startsWith('/profile') || pathname.startsWith('/checkout')) && !isAuthRoute) {
     if (!token) {
       return NextResponse.redirect(new URL('/login', request.url));
     }
@@ -31,5 +31,5 @@ export async function middleware(request) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/rider/:path*', '/profile/:path*']
+  matcher: ['/admin/:path*', '/rider/:path*', '/profile/:path*', '/checkout/:path*']
 };

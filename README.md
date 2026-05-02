@@ -1,12 +1,12 @@
-# ☕ Tap N' Brew
+# Brews Lee
 
 A full-stack Coffee Shop Online Ordering & Delivery System built with **Next.js 14**, **Supabase** (PostgreSQL, Auth, Storage), **NextAuth.js**, and **Tailwind CSS**. 
 
-This system features public menu browsing, a dynamic cart, user checkouts, an advanced admin dashboard for complete menu control (category, item, customization logic), rider management, and real-time capable data management.
+This system features a highly interactive and visually stunning public landing page with modern "Quiet Luxury" aesthetics, seamless Framer Motion animations, a dynamic cart, user checkouts, an advanced admin dashboard for complete menu control (category, item, customization logic), rider management, and real-time capable data management.
 
 ---
 
-## 🚀 How to Fully Set Up This Project
+## How to Set Up This Project
 
 ### 1. Prerequisites
 - **Node.js** (v18 or higher)
@@ -53,39 +53,14 @@ The app will be available at [http://localhost:3000](http://localhost:3000).
 
 ---
 
-## 📚 Project Phases Documentation (What Has Been Done)
+## Recent Updates & UI Enhancements
 
-### Phase 1: Scaffolding, Styling, and Database Provisioning
-- Established the base Next.js 14 App Router project.
-- Styled using Tailwind CSS featuring a custom branded palette (brown, cream, gold).
-- **Database Architecture (`setup-db.js`)**: Created a master migration script that automatically provisions `categories`, `menu_items`, `customization_groups`, `customization_options`, `profiles`, `riders`, `addresses`, `orders`, and more on Supabase PostgreSQL.
-- Inserted strict Row Level Security (RLS) policies and connected an automatic `menu-items` public storage bucket via Supabase Storage.
-
-### Phase 2: Authentication & Role Management (NextAuth + Supabase)
-- **NextAuth Integration**: Used `authOptions` to securely manage JWT sessions in combination with direct database inserts using the `supabaseServer` pattern via Service Role.
-- Set up a dual-provider Auth system: 
-  - **Google OAuth** for Customers and Admins (Admins assigned dynamically using a whitelist in the `.env.local`).
-  - **Credentials Provider** explicitly for **Riders**, mapping directly against the custom `riders` and `profiles` proxy table login identifiers.
-- Added strict Next.js API Middleware to protect `/admin`, `/rider`, and `/profile` routes based on specific session roles.
-
-### Phase 3: Admin Menu & Customizations Management
-- Built a secure, optimistic admin panel under `/app/admin/menu/items`.
-- Configured real-time, optimistic-loading UIs allowing the shop Admin to actively toggle features such as "Sold Out" or "Featured".
-- **Nested Customizations**: Created a hierarchy interface for Admins to design "Required" vs "Optional" groups (e.g. Size, Sugar Level) holding multiple price-modifying options.
-- Automated Cloud image FormData uploading handling direct item thumbnails strictly connected to Supabase Storage APIs.
-
-### Phase 4: Admin Rider Management
-- Developed the dashboard for Administrators to seamlessly provision new delivery accounts using `app/api/admin/riders/route.js`.
-- Bypassed forced email authentication via internal emails format (`rider_[username]@coffeeshop.internal`) managed safely by the NextAuth credentials adapter.
-- Exposed editing tools for updating rider metrics (photo, name, password reset) alongside a safe "soft deactivate" toggle flagging. Contains warning logic protecting deletions if a Rider currently has uncompleted `out_for_delivery` orders tied to them.
-
-### Phase 5: User Menu Browsing & Cart System
-- **Categories and Filtering**: Scaled the public landing page into a fully reactive display filtering dynamically by active menu items and linked categories.
-- **Cart Context Provider**: Implemented a globally persisted cookie-based cart context (`CartContext.js` / `cartUtils.js`) storing data arrays efficiently between sessions.
-- **Item Configurator**: Built an interactive modal that locks cart-addition depending on `Required` customization selections calculating price math recursively in real-time.
-- **Global Drawer**: Created an aesthetic Cart sliding drawer enabling users to visually alter sub-totals and increment options securely.
-
-### Phase 6: Checkout Process & Order Placement
-- Built a fully robust 4-step Next.js guided Wizard validating state progressions.
-- **Delivery vs Self-Pickup**: Smart UI forms switching between shop pickup timings or mapping out physical addresses dynamically populated via logged-in users' `addresses` relational table data.
-- **API Transaction Payload (`/api/orders/place/route.js`)**: Resolves guest sessions actively utilizing random UUIDs if unauthenticated. Takes strict snapshots of delivery locations, commits full configurations of the user's cart into individual `order_items`, and successfully stamps down auditable records in `order_status_logs` returning a trackable ticket cleanly.
+- **Brand Evolution**: Complete rebranding from "Tap N' Brew" to **"Brews Lee"**, integrating high-quality, AI-processed transparent PNG assets for menu items.
+- **Quiet Luxury Aesthetics**: Refined the visual hierarchy utilizing a custom coffee-shop color palette (`#FFF8F0`, `#C08552`, `#8C5A3C`, `#4B2E2B`), glassmorphism effects, and elegant dark overlays.
+- **Cinematic Landing Page**:
+  - Implemented a smooth, auto-playing dual-row **Text Marquee** using `framer-motion` to showcase brand messaging ("Taste the Passion", "The Taste That Lingers") with inline icon separators.
+  - Added the Shadcn **BlurFade** component to gracefully animate the hero section elements, taglines, and pricing pill badges as they scroll into view.
+  - Integrated an interactive **Menu Scroll Gallery** component built on WebGL and scroll-triggered animations to beautifully parade the featured beverages without page navigation.
+  - Upgraded the **Hero Section** with a dynamic Shutter Text effect and a dark-mode optimized background.
+- **Component Cleanup**: Safely removed deprecated experimental WebGL components (`CircularGallery`, `LightRays`, `Beams`, `FluidParticlesBackground`) to strictly adhere to the polished design system and improve bundle size.
+- **Order Tracking Updates**: Updated the order tracking UI to dynamically reflect the new Brews Lee branding during both Delivery and Self-Pickup flows.

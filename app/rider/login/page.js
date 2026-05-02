@@ -47,7 +47,7 @@ export default function RiderLoginPage() {
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center p-4">
       <div className="max-w-md w-full bg-white shadow-xl rounded-xl p-8 border-t-4 border-brown-dark">
-        <h1 className="text-center text-3xl font-bold text-brown-dark mb-2 tracking-wider">TAP N' BREW</h1>
+        <h1 className="text-center text-3xl font-bold text-brown-dark mb-2 tracking-wider">TAP N&apos; BREW</h1>
         <p className="text-center text-gray-500 mb-8 uppercase text-sm font-semibold tracking-widest">Rider Portal</p>
 
         {error && (

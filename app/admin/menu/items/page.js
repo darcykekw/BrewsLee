@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Button from "../../../../components/ui/Button";
 import Spinner from "../../../../components/ui/Spinner";
+import toast from "react-hot-toast";
 
 export default function ItemsPage() {
   const router = useRouter();
@@ -28,7 +29,10 @@ export default function ItemsPage() {
   };
 
   useEffect(() => {
-    fetchData();
+    const load = async () => {
+      await fetchData();
+    };
+    load();
   }, [filterCat]);
 
   const toggleStatus = async (id, field, value) => {
@@ -57,7 +61,7 @@ export default function ItemsPage() {
             <option value="">All Categories</option>
             {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
           </select>
-          <Button onClick={() => alert("Open Add Modal")}>+ Add Item</Button>
+          <Button onClick={() => toast("Add Item modal pending")}>+ Add Item</Button>
         </div>
       </div>
 

@@ -8,7 +8,7 @@ import Button from "../../components/ui/Button";
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const { state, getTotal, clearCart } = useCart();
   const cartItems = state.items;
 
@@ -44,6 +44,12 @@ export default function CheckoutPage() {
   }, [cartItems.length, step]);
 
   useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/login");
+    }
+  }, [status, router]);
+
+  useEffect(() => {
     let mounted = true;
     if (isLoggedIn) {
       fetch("/api/profile/addresses")
@@ -60,7 +66,7 @@ export default function CheckoutPage() {
         })
         .catch(console.error);
     } else {
-      setShowManualAddress(true);
+      setTimeout(() => setShowManualAddress(true), 0);
     }
     return () => { mounted = false; };
   }, [isLoggedIn]);
@@ -90,10 +96,6 @@ export default function CheckoutPage() {
 
       clearCart();
       
-      if (!isLoggedIn) {
-        alert("Order placed! Consider creating an account to track all your orders easily.");
-      }
-
       router.push(`/track/${data.orderToken || ""}`);
     } catch (err) {
       alert("Error: " + err.message);
@@ -114,7 +116,7 @@ export default function CheckoutPage() {
       <div className="min-h-screen bg-cream flex flex-col items-center justify-center p-4">
         <svg className="w-24 h-24 text-gray-300 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 0a2 2 0 100 4 2 2 0 000-4z"></path></svg>
         <h2 className="text-2xl font-bold text-gray-600 mb-6">Your cart is empty</h2>
-        <Button onClick={() => router.push("/")} className="px-8 text-lg py-3">Browse Menu</Button>
+        <Button onClick={() => router.push("/menu")} className="px-8 text-lg py-3">Browse Menu</Button>
       </div>
     );
   }
@@ -185,7 +187,7 @@ export default function CheckoutPage() {
               </div>
               
               <div className="flex flex-col sm:flex-row gap-4 mt-8">
-                <Button variant="secondary" onClick={() => router.push("/?openCart=true")} className="flex-1 py-4 text-lg border-2 border-dashed">Edit Cart</Button>
+                <Button variant="secondary" onClick={() => router.push("/menu?openCart=true")} className="flex-1 py-4 text-lg border-2 border-dashed">Edit Cart</Button>
                 <Button onClick={() => setStep(2)} className="flex-1 py-4 text-lg">Continue to Delivery</Button>
               </div>
             </div>
