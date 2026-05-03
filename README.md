@@ -32,7 +32,7 @@ ADMIN_EMAILS=your_email@domain.com,anotheradmin@example.com
 ```bash
 npm install
 ```
-*(Note: Running this command will automatically download and install all required packages, including recent UI additions like `@radix-ui/react-slot` and `class-variance-authority`, because they are natively tracked in the `package.json` file. You do not need to install them individually.)*
+*(Note: Running this command will automatically download and install all required packages)*
 
 ### 4. Database Setup & Seeding
 This project has a programmatic setup file that spins up all the necessary SQL tables, RLS policies, and basic seed data onto your Supabase project.
