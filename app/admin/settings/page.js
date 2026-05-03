@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import GradientButton from "@/components/ui/GradientButton";
 
 export default function AdminSettingsPage() {
   const { data: session, status } = useSession();
@@ -214,13 +215,16 @@ export default function AdminSettingsPage() {
 
           {/* Submit Button */}
           <div className="pt-6 border-t border-gray-200 flex justify-end">
-            <button 
+            <GradientButton 
               type="submit" 
               disabled={saving}
-              className="px-8 py-3 bg-brown hover:bg-brown-dark text-white font-bold rounded-lg shadow-sm transition disabled:opacity-50 flex items-center justify-center min-w-[200px]"
+              variant="primary"
+              className="!px-8 !py-3 min-w-[200px]"
             >
-              {saving ? <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div> : 'Save All Settings'}
-            </button>
+              <div className="flex items-center justify-center">
+                {saving ? <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div> : 'Save All Settings'}
+              </div>
+            </GradientButton>
           </div>
 
         </form>

@@ -156,15 +156,13 @@ export const NavbarLogo = () => {
   return (
     <a
       href="#hero"
-      className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal"
+      className="relative z-20 mr-4 flex items-center px-2 py-1"
     >
       <img
         src="/icon.png"
         alt="Brews Lee logo"
-        width={30}
-        height={30}
+        className="w-8 h-8 md:w-9 md:h-9 object-contain transform scale-[2.25] origin-left"
       />
-      <span className="text-[#F5F0E8] font-bold text-lg md:text-xl shrink-0">Brews Lee</span>
     </a>
   );
 };
@@ -178,22 +176,79 @@ export const NavbarButton = ({
   ...props
 }) => {
   const baseStyles =
-    "px-4 py-2 rounded-full text-sm font-bold relative cursor-pointer hover:-translate-y-0.5 transition duration-200 inline-block text-center";
+    "px-4 py-2 rounded-full text-sm font-bold relative cursor-pointer inline-block text-center transition-all duration-300";
 
-  const variantStyles = {
-    primary: "bg-[#C8963E] text-[#1a0a08] shadow-md hover:bg-[#DBA84E]",
-    secondary: "bg-transparent text-[#F5F0E8] hover:text-[#C8963E]",
-    dark: "bg-black text-white shadow-md",
-    gradient: "bg-gradient-to-b from-[#C8963E] to-[#A87830] text-white",
+  const variantMap = {
+    primary: "gradient-btn-primary",
+    secondary: "gradient-btn-ghost",
+    dark: "gradient-btn-secondary",
+    gradient: "gradient-btn-primary",
   };
+  
+  const selectedVariant = variantMap[variant] || "gradient-btn-primary";
+
+  // Re-use the global styles from GradientButton via class name if they are global, 
+  // but to be safe and strictly follow instructions, we'll inject the bubble effect for NavbarButton.
+  const style = `
+    .navbar-btn-custom {
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      border: ${variant === 'secondary' ? '1px solid #C08552' : 'none'};
+      background: ${variant === 'primary' ? 'linear-gradient(45deg, #8C5A3C, #C08552)' : variant === 'dark' ? 'linear-gradient(45deg, #4B2E2B, #6B3F3C)' : 'transparent'};
+      color: #FFF8F0;
+    }
+    .navbar-btn-custom:before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, rgba(255, 248, 240, 0.12), rgba(255, 248, 240, 0));
+      transform: rotate(45deg);
+      transition: all 0.5s ease;
+      z-index: -1;
+    }
+    .navbar-btn-custom:hover:before {
+      top: -100%;
+      left: -100%;
+    }
+    .navbar-btn-custom:after {
+      border-radius: 25px;
+      position: absolute;
+      content: '';
+      width: 0;
+      height: 100%;
+      top: 0;
+      z-index: -1;
+      box-shadow: inset 2px 2px 2px 0px rgba(255, 248, 240, 0.2), 7px 7px 20px 0px rgba(75, 46, 43, 0.15), 4px 4px 5px 0px rgba(75, 46, 43, 0.1);
+      transition: all 0.3s ease;
+      background: ${variant === 'primary' ? 'linear-gradient(45deg, #C08552, #DBA84E)' : variant === 'dark' ? 'linear-gradient(45deg, #6B3F3C, #8C5A3C)' : 'linear-gradient(45deg, #8C5A3C, #C08552)'};
+      right: 0;
+    }
+    .navbar-btn-custom:hover:after {
+      width: 100%;
+      left: 0;
+    }
+    .navbar-btn-custom:active {
+      top: 2px;
+      box-shadow: 0 2px 6px rgba(75, 46, 43, 0.25);
+    }
+    .navbar-btn-custom span {
+      position: relative;
+      z-index: 2;
+    }
+  `;
 
   return (
     <Tag
       href={href || undefined}
-      className={cn(baseStyles, variantStyles[variant], className)}
+      className={cn(baseStyles, "navbar-btn-custom", className)}
       {...props}
     >
-      {children}
+      <style jsx>{style}</style>
+      <span>{children}</span>
     </Tag>
   );
 };

@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 import { writeCart } from "../../../lib/cartUtils";
 import { useCart } from "../../../context/CartContext";
 import Toast from "../../../components/ui/Toast";
+import GradientButton from "@/components/ui/GradientButton";
 
 const deliverySteps = ["pending", "preparing", "out_for_delivery", "completed"];
 const deliveryLabels = ["Order Placed", "Preparing Your Order", "Out for Delivery", "Delivered"];
@@ -291,22 +292,30 @@ export default function TrackClient({ initialOrder, token }) {
         {(isCompletedType || isCancelled) && (
           <>
             {session ? (
-              <button
-                onClick={handleReorder}
-                disabled={isReordering}
-                className="w-full bg-gold hover:bg-yellow-500 text-brown-900 py-4 rounded-xl font-black text-lg shadow-lg uppercase tracking-widest transition disabled:opacity-50 border border-yellow-500 flex justify-center items-center"
-              >
-                {isReordering ? (
-                  <span className="animate-pulse">Loading menu items...</span>
-                ) : "Order Again"}
-              </button>
+              <div className="w-full">
+                <GradientButton
+                  onClick={handleReorder}
+                  disabled={isReordering}
+                  variant="primary"
+                  fullWidth={true}
+                  className="py-4 font-black text-lg uppercase tracking-widest"
+                >
+                  {isReordering ? (
+                    <span className="animate-pulse">Loading menu items...</span>
+                  ) : "Order Again"}
+                </GradientButton>
+              </div>
             ) : (
-              <Link
-                href="/login"
-                className="w-full bg-brown-dark hover:bg-brown text-white py-4 rounded-xl font-black text-lg shadow-lg uppercase tracking-widest transition flex justify-center items-center"
-              >
-                Sign in to reorder
-              </Link>
+              <div className="w-full">
+                <GradientButton
+                  href="/login"
+                  variant="ghost"
+                  fullWidth={true}
+                  className="py-4 font-black text-lg uppercase tracking-widest"
+                >
+                  Sign in to reorder
+                </GradientButton>
+              </div>
             )}
           </>
         )}

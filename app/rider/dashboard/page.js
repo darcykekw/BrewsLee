@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
+import GradientButton from "@/components/ui/GradientButton";
 
 export default function RiderDashboard() {
   const { data: session } = useSession();
@@ -188,20 +189,24 @@ export default function RiderDashboard() {
 
                   {/* Actions */}
                   {order.status === "preparing" && (
-                    <button
+                    <GradientButton
                       onClick={() => handleUpdateStatus(order.id, order.status)}
-                      className="w-full py-5 text-xl bg-green-600 hover:bg-green-700 text-white font-black rounded-xl shadow-lg transition-transform transform hover:-translate-y-1 focus:ring-4 focus:ring-green-300"
+                      variant="primary"
+                      fullWidth={true}
+                      className="py-5 text-xl font-black"
                     >
                       I Have The Order &mdash; Mark as Picked Up
-                    </button>
+                    </GradientButton>
                   )}
                   {order.status === "out_for_delivery" && (
-                    <button
+                    <GradientButton
                       onClick={() => handleUpdateStatus(order.id, order.status)}
-                      className="w-full py-5 text-xl bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl shadow-lg transition-transform transform hover:-translate-y-1 focus:ring-4 focus:ring-blue-300"
+                      variant="primary"
+                      fullWidth={true}
+                      className="py-5 text-xl font-black"
                     >
                       Order Delivered &mdash; Mark as Completed
-                    </button>
+                    </GradientButton>
                   )}
                 </div>
               </div>
@@ -237,15 +242,19 @@ export default function RiderDashboard() {
                 </div>
               ))}
               {page < totalPages && (
-                <button
-                  onClick={() => {
-                    setPage((p) => p + 1);
-                    fetchOrders(page + 1);
-                  }}
-                  className="w-full py-4 mt-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-black rounded-xl transition"
-                >
-                  Load More History
-                </button>
+                <div className="mt-2">
+                  <GradientButton
+                    onClick={() => {
+                      setPage((p) => p + 1);
+                      fetchOrders(page + 1);
+                    }}
+                    variant="secondary"
+                    fullWidth={true}
+                    className="py-4 font-black"
+                  >
+                    Load More History
+                  </GradientButton>
+                </div>
               )}
             </>
           )}

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import GradientButton from "@/components/ui/GradientButton";
 
 const TABS = ["All", "pending", "preparing", "ready", "out_for_delivery", "completed", "cancelled"];
 
@@ -109,12 +110,13 @@ export default function AdminOrdersPage() {
                     </span>
                   </td>
                   <td className="py-3 px-4 text-center">
-                    <Link
+                    <GradientButton
                       href={`/admin/orders/${order.id}`}
-                      className="text-brown-600 hover:text-brown-800 font-semibold text-sm underline"
+                      variant="secondary"
+                      className="!py-1 !px-3 !text-xs"
                     >
                       View Details
-                    </Link>
+                    </GradientButton>
                   </td>
                 </tr>
               ))}
@@ -125,21 +127,21 @@ export default function AdminOrdersPage() {
 
       {totalPages > 1 && (
         <div className="flex justify-center items-center mt-6 space-x-4">
-          <button
+          <GradientButton
             disabled={page === 1}
             onClick={() => setPage(page - 1)}
-            className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+            variant="secondary"
           >
             Previous
-          </button>
-          <span className="text-gray-700">Page {page} of {totalPages}</span>
-          <button
+          </GradientButton>
+          <span className="text-gray-700 font-bold">Page {page} of {totalPages}</span>
+          <GradientButton
             disabled={page === totalPages}
             onClick={() => setPage(page + 1)}
-            className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+            variant="secondary"
           >
             Next
-          </button>
+          </GradientButton>
         </div>
       )}
     </div>

@@ -27,3 +27,18 @@ body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
 }
+
+button, .btn {
+  border-radius: 25px;
+  transition: all 0.3s ease;
+}
+
+button:active {
+  top: 2px;
+  position: relative;
+}
+
+h2.gradient-heading {
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+}

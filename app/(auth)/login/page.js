@@ -1,107 +1,238 @@
 "use client";
 
-import { signIn, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, Suspense } from "react";
+import { signIn } from "next-auth/react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import toast from "react-hot-toast";
+import { Button } from "@/components/ui/Button";
+import { ChevronLeft } from "lucide-react";
 
-export default function UserLoginPage() {
-  const { data: session, status } = useSession();
+function LoginContent() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState({ email: "", password: "" });
+  const searchParams = useSearchParams();
+  const message = searchParams.get('message');
 
-  useEffect(() => {
-    if (status === "authenticated") {
-      router.push("/menu");
-    }
-  }, [status, router]);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+  const validateEmail = (email) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
 
-  const handleEmailLogin = async (e) => {
-    e.preventDefault();
-    if (!formData.email || !formData.password) {
-      toast.error("Please enter email and password");
+  const handleSignIn = async () => {
+    if (!email || !password) {
+      setError("Please enter both email and password.");
       return;
     }
-
-    setIsLoading(true);
-    const res = await signIn("customer-credentials", {
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+    setError("");
+    setLoading(true);
+    const result = await signIn("customer-credentials", {
+      email,
+      password,
       redirect: false,
-      email: formData.email,
-      password: formData.password,
     });
-
-    if (res?.error) {
-      toast.error(res.error);
+    setLoading(false);
+    if (result?.error) {
+      setError("Invalid email or password. Please try again.");
     } else {
       router.push("/menu");
     }
-    setIsLoading(false);
   };
 
-  if (status === "loading" || status === "authenticated") {
-    return <div className="h-screen flex items-center justify-center bg-cream"><p className="text-xl font-medium text-brown">Loading...</p></div>;
-  }
+  const handleGoogleSignIn = () => {
+    signIn("google", { callbackUrl: "/menu" });
+  };
 
   return (
-    <main className="min-h-screen bg-cream flex flex-col justify-center items-center p-4">
-      <div className="max-w-md w-full bg-white shadow-xl rounded-xl p-8 text-center border-t-4 border-gold">
-        <h1 className="text-3xl font-bold text-brown-dark mb-2 tracking-wider uppercase">TAP N&apos; BREW</h1>
-        <p className="text-gray-500 mb-8">Sign in to order your favorite coffee.</p>
-
-        <form onSubmit={handleEmailLogin} className="flex flex-col gap-4 mb-6">
-          <input 
-            type="email" 
-            name="email"
-            placeholder="Email address" 
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-gold focus:border-gold outline-none transition text-left" 
-          />
-          <input 
-            type="password" 
-            name="password"
-            placeholder="Password" 
-            value={formData.password}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-gold focus:border-gold outline-none transition text-left" 
-          />
-          <button 
-            type="submit" 
-            disabled={isLoading}
-            className="w-full bg-brown-dark text-white rounded-lg px-4 py-3 font-bold hover:bg-brown transition disabled:opacity-50 disabled:cursor-not-allowed"
+    <div 
+      className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden w-full"
+      style={{ backgroundColor: '#4B2E2B' }}
+    >
+      {/* Back button — top left */}
+      <div className="absolute top-6 left-6 z-20">
+        <Link href="/">
+          <Button
+            variant="link"
+            className="flex items-center gap-1 transition hover:-translate-x-0.5"
+            style={{ color: '#FFF8F0', opacity: 0.75 }}
           >
-            {isLoading ? "Signing in..." : "Sign In"}
-          </button>
-        </form>
-
-        <div className="text-sm text-gray-600 mb-6">
-          Don&apos;t have an account? <Link href="/register" className="text-gold font-bold hover:underline">Register here</Link>
-        </div>
-
-        <div className="relative flex items-center py-2 mb-6">
-          <div className="flex-grow border-t border-gray-200"></div>
-          <span className="flex-shrink-0 mx-4 text-gray-400 text-sm font-medium">OR</span>
-          <div className="flex-grow border-t border-gray-200"></div>
-        </div>
-
-        <button 
-          onClick={() => signIn("google", { callbackUrl: "/menu" })}
-          className="w-full bg-white border border-gray-300 text-gray-700 rounded-lg px-4 py-3 font-bold hover:bg-gray-50 transition flex items-center justify-center gap-3"
-        >
-          <svg className="w-5 h-5" viewBox="0 0 48 48">
-            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
-            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.9c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.13-10.36 7.13-17.65z"></path>
-            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path>
-            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
-            <path fill="none" d="M0 0h48v48H0z"></path>
-          </svg>
-          Sign in with Google
-        </button>
+            <ChevronLeft size={16} strokeWidth={2} aria-hidden="true" />
+            Go back
+          </Button>
+        </Link>
       </div>
-    </main>
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <img
+          src="/menu/BrewsLeeBackground.png"
+          alt="Login Background"
+          className="w-full h-full object-cover object-center"
+          style={{ filter: "brightness(0.25)" }}
+        />
+      </div>
+
+      {/* Glow orbs for atmosphere */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden z-0">
+        <div
+          className="absolute -top-32 left-1/4 h-72 w-72 rounded-full blur-3xl opacity-20"
+          style={{ backgroundColor: '#C08552' }}
+        />
+        <div
+          className="absolute bottom-0 right-1/4 h-80 w-80 rounded-full blur-3xl opacity-15"
+          style={{ backgroundColor: '#8C5A3C' }}
+        />
+      </div>
+
+      {/* Glass card */}
+      <div
+        className="relative z-10 w-full max-w-sm rounded-3xl p-8 flex flex-col items-center shadow-2xl"
+        style={{
+          background: 'linear-gradient(135deg, rgba(192,133,82,0.12) 0%, rgba(75,46,43,0.9) 100%)',
+          backdropFilter: 'blur(12px)',
+          border: '1px solid rgba(192,133,82,0.2)',
+        }}
+      >
+        {/* Logo */}
+        <div
+          className="flex items-center justify-center w-14 h-14 rounded-full mb-4 shadow-lg"
+          style={{ backgroundColor: 'rgba(192,133,82,0.2)', border: '1px solid rgba(192,133,82,0.4)' }}
+        >
+          <img
+            src="/icon.png"
+            alt="BrewNook logo"
+            className="w-8 h-8 rounded-full object-cover"
+          />
+        </div>
+
+        {/* Title */}
+        <h2
+          className="text-2xl font-bold mb-1 text-center"
+          style={{ color: '#FFF8F0' }}
+        >
+          Welcome Back
+        </h2>
+        <p
+          className="text-xs mb-6 text-center"
+          style={{ color: '#FFF8F0', opacity: 0.55 }}
+        >
+          Sign in to your BrewNook account
+        </p>
+
+        {/* Message Banner */}
+        {message && (
+          <div
+            className="w-full text-center text-sm py-2 px-4 rounded-xl mb-4"
+            style={{ backgroundColor: 'rgba(192,133,82,0.15)', color: '#C08552' }}
+          >
+            {message}
+          </div>
+        )}
+
+        {/* Form */}
+        <div className="flex flex-col w-full gap-4">
+          <div className="w-full flex flex-col gap-3">
+            <input
+              placeholder="Email address"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-5 py-3 rounded-xl text-sm focus:outline-none focus:ring-2"
+              style={{
+                backgroundColor: 'rgba(255,248,240,0.08)',
+                color: '#FFF8F0',
+                border: '1px solid rgba(192,133,82,0.25)',
+              }}
+            />
+            <input
+              placeholder="Password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSignIn()}
+              className="w-full px-5 py-3 rounded-xl text-sm focus:outline-none focus:ring-2"
+              style={{
+                backgroundColor: 'rgba(255,248,240,0.08)',
+                color: '#FFF8F0',
+                border: '1px solid rgba(192,133,82,0.25)',
+              }}
+            />
+            {error && (
+              <div className="text-sm text-red-400 text-left">{error}</div>
+            )}
+          </div>
+
+          <hr style={{ borderColor: 'rgba(192,133,82,0.15)' }} />
+
+          <div className="flex flex-col gap-3">
+            {/* Email sign in button */}
+            <button
+              onClick={handleSignIn}
+              disabled={loading}
+              className="w-full font-semibold px-5 py-3 rounded-full text-sm transition hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{
+                background: 'linear-gradient(45deg, #8C5A3C, #C08552)',
+                color: '#FFF8F0',
+                boxShadow: '0 4px 12px rgba(192,133,82,0.3)',
+              }}
+            >
+              {loading ? "Signing in..." : "Sign In"}
+            </button>
+
+            {/* Divider */}
+            <div className="flex items-center gap-3">
+              <hr className="flex-1" style={{ borderColor: 'rgba(192,133,82,0.15)' }} />
+              <span className="text-xs" style={{ color: '#FFF8F0', opacity: 0.4 }}>or</span>
+              <hr className="flex-1" style={{ borderColor: 'rgba(192,133,82,0.15)' }} />
+            </div>
+
+            {/* Google sign in */}
+            <button
+              onClick={handleGoogleSignIn}
+              className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-full font-medium text-sm transition hover:-translate-y-0.5"
+              style={{
+                background: 'linear-gradient(45deg, #4B2E2B, #6B3F3C)',
+                color: '#FFF8F0',
+                border: '1px solid rgba(192,133,82,0.2)',
+              }}
+            >
+              <img
+                src="https://www.svgrepo.com/show/475656/google-color.svg"
+                alt="Google"
+                className="w-5 h-5"
+              />
+              Continue with Google
+            </button>
+
+            {/* Register link */}
+            <div className="w-full text-center mt-1">
+              <span className="text-xs" style={{ color: '#FFF8F0', opacity: 0.55 }}>
+                Don&apos;t have an account?{" "}
+                <Link
+                  href="/register"
+                  className="font-semibold underline transition"
+                  style={{ color: '#C08552' }}
+                >
+                  Create one free
+                </Link>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#4B2E2B', color: '#FFF8F0' }}>Loading...</div>}>
+      <LoginContent />
+    </Suspense>
   );
 }

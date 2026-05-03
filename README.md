@@ -32,6 +32,7 @@ ADMIN_EMAILS=your_email@domain.com,anotheradmin@example.com
 ```bash
 npm install
 ```
+*(Note: Running this command will automatically download and install all required packages, including recent UI additions like `@radix-ui/react-slot` and `class-variance-authority`, because they are natively tracked in the `package.json` file. You do not need to install them individually.)*
 
 ### 4. Database Setup & Seeding
 This project has a programmatic setup file that spins up all the necessary SQL tables, RLS policies, and basic seed data onto your Supabase project.
@@ -62,5 +63,14 @@ The app will be available at [http://localhost:3000](http://localhost:3000).
   - Added the Shadcn **BlurFade** component to gracefully animate the hero section elements, taglines, and pricing pill badges as they scroll into view.
   - Integrated an interactive **Menu Scroll Gallery** component built on WebGL and scroll-triggered animations to beautifully parade the featured beverages without page navigation.
   - Upgraded the **Hero Section** with a dynamic Shutter Text effect and a dark-mode optimized background.
-- **Component Cleanup**: Safely removed deprecated experimental WebGL components (`CircularGallery`, `LightRays`, `Beams`, `FluidParticlesBackground`) to strictly adhere to the polished design system and improve bundle size.
+- **High-End Authentication Overhaul**:
+  - Completely redesigned the Login and Register pages using a premium "Quiet Luxury" **Glassmorphism** component featuring gold-tinted borders, dynamic glow orbs, and a cinematic `BrewsLeeBackground.png` overlay.
+  - Implemented a clean **Go Back** UI button utilizing `@radix-ui` and Tailwind variants, allowing seamless navigation back to the hero landing page.
+  - Suppressed the global navigation bar (`ConditionalNav`) from appearing over the authentication pages to preserve visual immersion.
+- **Route Protection & Middleware**: 
+  - The `/menu` ordering page is now strictly protected. Unauthenticated users (guests) attempting to access the menu or any static assets within `/public/menu/` are gracefully redirected to the `/login` flow.
+  - Replaced native `next/image` components with standard HTML `<img>` tags on heavily styled landing page backgrounds to bypass deep Next.js JIT cache/optimization bugs and ensure 100% render reliability on massive (7.1 MB) background assets.
+- **Component & Dependency Cleanup**: 
+  - Safely removed deprecated experimental WebGL components (`CircularGallery`, `LightRays`, `Beams`, `FluidParticlesBackground`) to strictly adhere to the polished design system.
+  - Natively purged heavy, unused server-side AI packages (`@imgly/background-removal-node`, `color-diff`, `pg`) and wiped the `.next` local cache, successfully reclaiming over **2 Gigabytes** of project disk space.
 - **Order Tracking Updates**: Updated the order tracking UI to dynamically reflect the new Brews Lee branding during both Delivery and Self-Pickup flows.

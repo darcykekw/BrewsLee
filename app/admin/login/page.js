@@ -2,7 +2,7 @@
 
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
-import Button from "../../../components/ui/Button";
+import GradientButton from "@/components/ui/GradientButton";
 
 export default function AdminLoginPage() {
   const searchParams = useSearchParams();
@@ -11,7 +11,7 @@ export default function AdminLoginPage() {
   return (
     <div className="min-h-screen bg-brown-dark flex flex-col justify-center items-center p-4">
       <div className="max-w-md w-full bg-white shadow-2xl rounded-xl p-8 text-center border-t-4 border-gold">
-        <h1 className="text-3xl font-bold text-brown-dark mb-2 tracking-wider">TAP N&apos; BREW</h1>
+        <h1 className="text-3xl font-bold text-brown-dark mb-2 tracking-wider">BREWS LEE</h1>
         <p className="text-gray-500 mb-8 uppercase text-sm font-semibold tracking-widest">Admin Portal</p>
 
         {error && (
@@ -20,13 +20,14 @@ export default function AdminLoginPage() {
           </div>
         )}
 
-        <Button 
+        <GradientButton 
           variant="primary" 
           onClick={() => signIn("google", { callbackUrl: "/admin/dashboard" })}
-          className="w-full py-3"
+          fullWidth={true}
+          className="py-3"
         >
           Sign in with Google
-        </Button>
+        </GradientButton>
       </div>
     </div>
   );

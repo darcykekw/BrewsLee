@@ -3,7 +3,7 @@
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import Button from "../../../components/ui/Button";
+import GradientButton from "@/components/ui/GradientButton";
 
 export default function RiderLoginPage() {
   const { data: session, status } = useSession();
@@ -47,7 +47,7 @@ export default function RiderLoginPage() {
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center p-4">
       <div className="max-w-md w-full bg-white shadow-xl rounded-xl p-8 border-t-4 border-brown-dark">
-        <h1 className="text-center text-3xl font-bold text-brown-dark mb-2 tracking-wider">TAP N&apos; BREW</h1>
+        <h1 className="text-center text-3xl font-bold text-brown-dark mb-2 tracking-wider">BREWS LEE</h1>
         <p className="text-center text-gray-500 mb-8 uppercase text-sm font-semibold tracking-widest">Rider Portal</p>
 
         {error && (
@@ -78,9 +78,9 @@ export default function RiderLoginPage() {
             />
           </div>
           
-          <Button variant="secondary" type="submit" disabled={isLoading} className="w-full py-3 mt-4">
+          <GradientButton variant="primary" type="submit" disabled={isLoading} fullWidth={true} className="py-3 mt-4">
             {isLoading ? "Signing in..." : "Sign In"}
-          </Button>
+          </GradientButton>
         </form>
       </div>
     </div>

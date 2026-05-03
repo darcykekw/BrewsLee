@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Button from "../../../../components/ui/Button";
+import GradientButton from "@/components/ui/GradientButton";
 import Spinner from "../../../../components/ui/Spinner";
 import toast from "react-hot-toast";
 
@@ -61,7 +61,7 @@ export default function ItemsPage() {
             <option value="">All Categories</option>
             {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
           </select>
-          <Button onClick={() => toast("Add Item modal pending")}>+ Add Item</Button>
+          <GradientButton onClick={() => toast("Add Item modal pending")} variant="primary" className="!px-4 !py-2 !text-sm">+ Add Item</GradientButton>
         </div>
       </div>
 
@@ -102,9 +102,9 @@ export default function ItemsPage() {
                     </button>
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <button onClick={() => router.push(`/admin/menu/items/${item.id}/customizations`)} className="text-purple-600 hover:text-purple-900 mx-2 text-sm">Customizations</button>
-                    <button className="text-blue-600 hover:text-blue-900 mx-2 text-sm">Edit</button>
-                    <button className="text-red-600 hover:text-red-900 text-sm">Del</button>
+                    <button onClick={() => router.push(`/admin/menu/items/${item.id}/customizations`)} className="text-brown-dark font-bold hover:underline mx-2 text-sm">Customizations</button>
+                    <button className="text-gold font-bold hover:underline mx-2 text-sm">Edit</button>
+                    <button className="text-red-700 font-bold hover:underline text-sm">Del</button>
                   </td>
                 </tr>
               ))}

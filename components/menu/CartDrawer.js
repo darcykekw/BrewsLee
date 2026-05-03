@@ -3,6 +3,7 @@
 import { useCart } from "../../context/CartContext";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import GradientButton from "@/components/ui/GradientButton";
 
 export default function CartDrawer({ isOpen, onClose }) {
   const { state, removeItem, updateQuantity, getTotal, clearCart } = useCart();
@@ -97,27 +98,37 @@ export default function CartDrawer({ isOpen, onClose }) {
             </div>
             
             {session ? (
-              <button 
-                onClick={() => {
-                  onClose();
-                  router.push("/checkout");
-                }}
-                className="w-full bg-gold hover:bg-yellow-500 text-brown-dark font-bold text-lg py-4 rounded-xl shadow-lg transition-transform active:scale-95 flex justify-center items-center gap-3 tracking-wider group"
-              >
-                Checkout
-                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-              </button>
+              <div className="w-full">
+                <GradientButton 
+                  onClick={() => {
+                    onClose();
+                    router.push("/checkout");
+                  }}
+                  variant="primary"
+                  fullWidth={true}
+                >
+                  <span className="flex items-center justify-center gap-3 w-full">
+                    Checkout
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                  </span>
+                </GradientButton>
+              </div>
             ) : (
-              <button 
-                onClick={() => {
-                  onClose();
-                  router.push("/login");
-                }}
-                className="w-full bg-brown hover:bg-brown-dark text-white font-bold text-lg py-4 rounded-xl shadow-lg transition-transform active:scale-95 flex justify-center items-center gap-3 tracking-wider group"
-              >
-                Sign in to Order
-                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
-              </button>
+              <div className="w-full">
+                <GradientButton 
+                  onClick={() => {
+                    onClose();
+                    router.push("/login");
+                  }}
+                  variant="ghost"
+                  fullWidth={true}
+                >
+                  <span className="flex items-center justify-center gap-3 w-full">
+                    Sign in to Order
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
+                  </span>
+                </GradientButton>
+              </div>
             )}
           </div>
         )}

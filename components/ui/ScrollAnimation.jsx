@@ -1,68 +1,62 @@
-import { cn } from '@/lib/utils';
-import { motion } from 'motion/react';
-import React, { forwardRef } from 'react';
+'use client';
+import { motion } from 'framer-motion';
 
-const generateVariants = (direction) => {
-  const axis = direction === 'left' || direction === 'right' ? 'x' : 'y';
-  const value = direction === 'right' || direction === 'down' ? 100 : -100;
-
-  return {
-    hidden: { filter: 'blur(10px)', opacity: 0, [axis]: value },
-    visible: {
-      filter: 'blur(0px)',
-      opacity: 1,
-      [axis]: 0,
-      transition: {
-        duration: 0.5,
-        ease: 'easeOut',
-      },
-    },
-  };
+const variants = {
+  up: {
+    hidden: { opacity: 0, y: 40 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+  },
+  down: {
+    hidden: { opacity: 0, y: -40 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+  },
+  left: {
+    hidden: { opacity: 0, x: 40 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+  },
+  right: {
+    hidden: { opacity: 0, x: -40 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+  },
+  fade: {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+  },
+  scaleUp: {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+  }
 };
 
-const defaultViewport = { amount: 0.3, margin: '0px 0px -200px 0px' };
+export default function ScrollAnimation({ 
+  children, 
+  direction = 'up', 
+  delay = 0, 
+  className = '', 
+  once = true 
+}) {
+  const selectedVariant = variants[direction] || variants.up;
+  
+  const customVariant = {
+    hidden: selectedVariant.hidden,
+    visible: {
+      ...selectedVariant.visible,
+      transition: {
+        ...selectedVariant.visible.transition,
+        delay: delay
+      }
+    }
+  };
 
-const ScrollAnimation = forwardRef(
-  (
-    {
-      children,
-      className,
-      variants,
-      viewport = defaultViewport,
-      delay = 0,
-      direction = 'down',
-      ...rest
-    },
-    ref
-  ) => {
-    const baseVariants = variants || generateVariants(direction);
-    const modifiedVariants = {
-      hidden: baseVariants.hidden,
-      visible: {
-        ...baseVariants.visible,
-        transition: {
-          ...baseVariants.visible.transition,
-          delay,
-        },
-      },
-    };
-
-    return (
-      <motion.div
-        ref={ref}
-        whileInView="visible"
-        initial="hidden"
-        variants={modifiedVariants}
-        viewport={viewport}
-        className={cn(className)}
-        {...rest}
-      >
-        {children}
-      </motion.div>
-    );
-  }
-);
-
-ScrollAnimation.displayName = 'ScrollAnimation';
-
-export default ScrollAnimation;
+  return (
+    <motion.div
+      variants={customVariant}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: once, margin: "-10%" }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}

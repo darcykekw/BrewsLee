@@ -21,7 +21,10 @@ export async function middleware(request) {
     }
   }
   
-  if ((pathname.startsWith('/profile') || pathname.startsWith('/checkout')) && !isAuthRoute) {
+  // Check if the path is a static file (has an extension)
+  const isFile = pathname.match(/\.[a-zA-Z0-9]+$/);
+  
+  if ((pathname.startsWith('/profile') || pathname.startsWith('/checkout') || (pathname.startsWith('/menu') && !isFile)) && !isAuthRoute) {
     if (!token) {
       return NextResponse.redirect(new URL('/login', request.url));
     }
@@ -31,5 +34,5 @@ export async function middleware(request) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/rider/:path*', '/profile/:path*', '/checkout/:path*']
+  matcher: ['/admin/:path*', '/rider/:path*', '/profile/:path*', '/checkout/:path*', '/menu/:path*']
 };

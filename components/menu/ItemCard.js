@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import GradientButton from "@/components/ui/GradientButton";
 
 export default function ItemCard({ item, onOpenModal, isFavorite, onToggleFavorite }) {
   const handleCardClick = (e) => {
@@ -44,7 +45,7 @@ export default function ItemCard({ item, onOpenModal, isFavorite, onToggleFavori
             className="absolute top-3 right-3 p-1.5 bg-white/80 hover:bg-white backdrop-blur rounded-full shadow-sm transition"
           >
              <svg 
-               className={`w-5 h-5 transition-colors ${isFavorite ? 'text-red-500 fill-current' : 'text-gray-400 hover:text-red-500'}`} 
+               className={`w-5 h-5 transition-colors ${isFavorite ? 'text-[#C08552] fill-current' : 'text-gray-400 hover:text-[#C08552]'}`} 
                fill={isFavorite ? "currentColor" : "none"} 
                stroke="currentColor" 
                viewBox="0 0 24 24"
@@ -65,13 +66,13 @@ export default function ItemCard({ item, onOpenModal, isFavorite, onToggleFavori
         
         <div className="mt-4 flex items-center justify-between">
           <span className="font-bold text-brown-dark">â‚±{item.price}</span>
-          <button 
+          <GradientButton 
             disabled={!item.is_available}
             onClick={(e) => { e.stopPropagation(); onOpenModal(item); }}
-            className={`px-4 py-1.5 rounded-full text-sm font-semibold transition ${item.is_available ? 'bg-brown-dark text-white hover:bg-brown-light' : 'bg-gray-200 text-gray-500 cursor-not-allowed'}`}
+            variant="primary"
           >
             Add
-          </button>
+          </GradientButton>
         </div>
       </div>
     </div>

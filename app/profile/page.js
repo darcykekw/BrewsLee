@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import GradientButton from "@/components/ui/GradientButton";
 
 export default function ProfilePage() {
   const { data: session, status } = useSession();
@@ -231,9 +232,9 @@ export default function ProfilePage() {
                     <span className="text-sm text-gray-500">Member since {new Date(profile.created_at).toLocaleDateString()}</span>
                   </div>
 
-                  <button type="submit" className="px-6 py-2 bg-brown-dark text-white rounded hover:bg-brown-light transition">
+                  <GradientButton type="submit" variant="primary">
                     Save Changes
-                  </button>
+                  </GradientButton>
                 </form>
               </div>
             )}
@@ -264,9 +265,9 @@ export default function ProfilePage() {
                       </div>
                       <div className="flex items-center gap-3">
                          {!addr.is_default && (
-                           <button onClick={() => handleSetDefaultAddress(addr.id, addr)} className="text-sm text-blue-600 hover:underline">Set Default</button>
+                           <button onClick={() => handleSetDefaultAddress(addr.id, addr)} className="text-sm text-gold font-bold hover:underline">Set Default</button>
                          )}
-                         <button onClick={() => handleDeleteAddress(addr.id)} className="text-sm text-red-600 hover:underline">Delete</button>
+                         <button onClick={() => handleDeleteAddress(addr.id)} className="text-sm text-red-700 font-bold hover:underline">Delete</button>
                       </div>
                     </div>
                   ))}
@@ -298,7 +299,7 @@ export default function ProfilePage() {
                         <label htmlFor="is_default" className="text-sm">Set as default address</label>
                       </div>
                       <div className="md:col-span-2 mt-2">
-                        <button type="submit" className="px-6 py-2 bg-black text-white font-semibold rounded hover:bg-gray-800 transition">Save Address</button>
+                        <GradientButton type="submit" variant="primary">Save Address</GradientButton>
                       </div>
                     </form>
                   </div>
@@ -326,10 +327,10 @@ export default function ProfilePage() {
                         </p>
                       </div>
                       <div className="flex flex-row md:flex-col items-center md:items-end justify-between gap-2">
-                         <span className="font-bold text-lg">â‚±{order.total}</span>
-                         <Link href={`/track/${order.guest_token}`} className="text-sm bg-brown-dark text-white px-4 py-1.5 rounded hover:bg-brown-light transition">
+                         <span className="font-bold text-lg">₱{order.total}</span>
+                         <GradientButton href={`/track/${order.guest_token}`} variant="secondary" className="!py-1.5 !px-4 !text-sm">
                            Track / View
-                         </Link>
+                         </GradientButton>
                       </div>
                     </div>
                   ))}
@@ -356,10 +357,10 @@ export default function ProfilePage() {
                            )}
                            <button 
                              onClick={() => handleRemoveFavorite(item.id)}
-                             className="absolute top-2 right-2 bg-white/80 p-1.5 rounded-full hover:bg-white shadow text-red-500 transition-transform hover:scale-110"
+                             className="absolute top-2 right-2 bg-white/80 p-1.5 rounded-full hover:bg-white shadow text-[#C08552] transition-transform hover:scale-110"
                            >
                              {/* Filled Heart */}
-                             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                             <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
                               <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                              </svg>
                            </button>

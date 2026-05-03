@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useCart } from "../../context/CartContext";
 import Image from "next/image";
+import GradientButton from "@/components/ui/GradientButton";
 
 export default function ItemModal({ item, onClose }) {
   const { addItem } = useCart();
@@ -114,9 +115,11 @@ export default function ItemModal({ item, onClose }) {
   return (
     <div className="fixed inset-0 bg-black/60 z-50 flex justify-center items-end sm:items-center p-4">
       <div className="bg-white w-full max-w-2xl rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden animate-slide-up sm:animate-fade-in relative flex flex-col max-h-[90vh]">
-        <button onClick={onClose} className="absolute top-4 right-4 z-10 p-2 bg-white/80 hover:bg-white rounded-full transition shadow text-gray-700">
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-        </button>
+        <div className="absolute top-4 right-4 z-10">
+          <GradientButton onClick={onClose} variant="secondary" className="!px-3 !min-w-0">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          </GradientButton>
+        </div>
 
         <div className="h-64 sm:h-80 w-full bg-cream-light relative shrink-0">
           {item.image_url && <Image src={item.image_url} alt={item.name} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" priority />}
@@ -175,22 +178,25 @@ export default function ItemModal({ item, onClose }) {
                <button onClick={() => setQuantity(quantity + 1)} className="px-5 hover:bg-gray-100 transition text-gray-600 font-bold w-12 sm:w-auto">+</button>
              </div>
 
-             <button 
-                onClick={handleAddToCart}
-                disabled={showSuccess}
-                className={`flex-1 w-full h-14 rounded-lg font-bold text-white text-lg transition-all flex items-center justify-center gap-2 ${showSuccess ? 'bg-green-500 scale-95' : 'bg-brown-dark hover:bg-brown focus:ring-4 ring-brown/30 active:scale-95'}`}
-             >
-               {showSuccess ? (
-                 <>
-                   <svg className="w-6 h-6 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                   Added!
-                 </>
-               ) : (
-                 <>
-                   Add to Cart • ₱{calculateSubtotal()}
-                 </>
-               )}
-             </button>
+             <div className="flex-1 w-full flex">
+               <GradientButton 
+                  onClick={handleAddToCart}
+                  disabled={showSuccess}
+                  variant="primary"
+                  fullWidth={true}
+               >
+                 {showSuccess ? (
+                   <span className="flex items-center gap-2">
+                     <svg className="w-6 h-6 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+                     Added!
+                   </span>
+                 ) : (
+                   <span>
+                     Add to Cart • ₱{calculateSubtotal()}
+                   </span>
+                 )}
+               </GradientButton>
+             </div>
           </div>
         </div>
 

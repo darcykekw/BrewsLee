@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import Button from "../../../../components/ui/Button";
+import GradientButton from "@/components/ui/GradientButton";
 import Spinner from "../../../../components/ui/Spinner";
 import toast from "react-hot-toast";
 
@@ -49,7 +49,7 @@ export default function CategoriesPage() {
     <div className="p-8 max-w-5xl mx-auto">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-brown-dark">Menu Categories</h1>
-        <Button onClick={() => toast("Add Category modal pending")}>+ Add Category</Button>
+        <GradientButton onClick={() => toast("Add Category modal pending")} variant="primary" className="!px-4 !py-2 !text-sm">+ Add Category</GradientButton>
       </div>
       <div className="bg-white shadow rounded-lg overflow-hidden">
         <table className="min-w-full divide-y divide-gray-200">
@@ -77,8 +77,8 @@ export default function CategoriesPage() {
                    </button>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <button className="text-blue-600 hover:text-blue-900 mr-3">Edit</button>
-                  <button className="text-red-600 hover:text-red-900">Delete</button>
+                  <button className="text-gold font-bold hover:underline mr-3">Edit</button>
+                  <button className="text-red-700 font-bold hover:underline">Delete</button>
                 </td>
               </tr>
             ))}

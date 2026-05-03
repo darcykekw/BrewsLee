@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Button from "../../../components/ui/Button";
+import GradientButton from "../../../components/ui/GradientButton";
 import Spinner from "../../../components/ui/Spinner";
 import toast from "react-hot-toast";
 
@@ -130,7 +130,7 @@ export default function AdminRidersPage() {
     <div className="p-8 max-w-6xl mx-auto">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-brown-dark">Rider Management</h1>
-        <Button onClick={openAddModal}>+ Add Rider</Button>
+        <GradientButton onClick={openAddModal} variant="primary" className="!px-4 !py-2 !text-sm">+ Add Rider</GradientButton>
       </div>
 
       <div className="bg-white shadow rounded-lg overflow-hidden">
@@ -165,9 +165,9 @@ export default function AdminRidersPage() {
                   {r.active_deliveries.length > 0 ? r.active_deliveries.length : "None"}
                 </td>
                 <td className="px-6 py-4 text-right">
-                  <button onClick={() => openEditModal(r)} className="text-blue-600 hover:text-blue-900 mx-2 text-sm font-medium">Edit</button>
+                  <button onClick={() => openEditModal(r)} className="text-gold font-bold hover:underline mx-2 text-sm">Edit</button>
                   {r.is_active && (
-                    <button onClick={() => deactivateRider(r.id, r.active_deliveries)} className="text-red-600 hover:text-red-900 text-sm font-medium">
+                    <button onClick={() => deactivateRider(r.id, r.active_deliveries)} className="text-red-700 font-bold hover:underline text-sm">
                       Deactivate
                     </button>
                   )}
@@ -216,8 +216,8 @@ export default function AdminRidersPage() {
               </div>
 
               <div className="flex justify-end gap-3 mt-6">
-                <Button variant="secondary" onClick={() => setModalOpen(false)} type="button">Cancel</Button>
-                <Button type="submit" disabled={formLoading}>{formLoading ? "Saving..." : "Save Rider"}</Button>
+                <GradientButton variant="secondary" onClick={() => setModalOpen(false)} type="button">Cancel</GradientButton>
+                <GradientButton variant="primary" type="submit" disabled={formLoading}>{formLoading ? "Saving..." : "Save Rider"}</GradientButton>
               </div>
             </form>
           </div>

@@ -5,7 +5,7 @@ import Navbar from "./Navbar";
 
 export function ConditionalNav() {
   const pathname = usePathname();
-  // Hide global navbar for rider routes and landing page (/)
-  if (pathname?.startsWith("/rider") || pathname === "/") return null;
+  // Hide global navbar for rider routes, auth pages, and landing page (/)
+  if (pathname?.startsWith("/rider") || pathname === "/" || pathname === "/login" || pathname === "/register") return null;
   return <Navbar />;
 }

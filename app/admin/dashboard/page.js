@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import Chart from "chart.js/auto";
 import { formatTimeAgo } from "@/lib/formatters";
 import Spinner from "@/components/ui/Spinner";
+import GradientButton from "@/components/ui/GradientButton";
 
 export default function AdminDashboardPage() {
   const { data: session, status } = useSession();
@@ -214,9 +215,9 @@ export default function AdminDashboardPage() {
       <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold text-brown-dark tracking-tight">Admin Dashboard</h1>
-          <Link href="/admin/settings" className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 font-bold transition">
+          <GradientButton href="/admin/settings" variant="secondary" className="!px-4 !py-2 !text-sm">
             Store Settings
-          </Link>
+          </GradientButton>
         </div>
 
         {/* 1. Summary Cards */}
@@ -322,19 +323,21 @@ export default function AdminDashboardPage() {
                           </td>
                           <td className="p-4 text-right space-x-2 whitespace-nowrap">
                             {order.status === 'pending' && (
-                              <button 
+                              <GradientButton 
                                 onClick={() => handleConfirmOrder(order.id)}
-                                className="px-3 py-1.5 bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold rounded-lg shadow-sm transition"
+                                variant="primary"
+                                className="!px-3 !py-1.5 !text-xs !inline-block"
                               >
                                 Confirm
-                              </button>
+                              </GradientButton>
                             )}
-                            <Link 
+                            <GradientButton 
                                 href={`/admin/orders/${order.id}`}
-                                className="px-3 py-1.5 bg-gray-200 hover:bg-gray-300 text-gray-800 text-xs font-bold rounded-lg transition inline-block"
+                                variant="secondary"
+                                className="!px-3 !py-1.5 !text-xs !inline-block"
                             >
                               View
-                            </Link>
+                            </GradientButton>
                           </td>
                         </tr>
                       ))}
@@ -380,19 +383,27 @@ export default function AdminDashboardPage() {
                  </label>
 
                  <div className="mt-auto pt-6 flex gap-3">
-                    <button 
-                      onClick={handleClearBanner}
-                      className="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold rounded-lg transition"
-                    >
-                      Clear
-                    </button>
-                    <button 
-                      onClick={handleSaveBanner}
-                      disabled={bannerSaving}
-                      className="flex-1 px-4 py-2 bg-brown-dark hover:bg-brown-light text-white font-bold rounded-lg shadow-sm transition disabled:opacity-50 flex justify-center items-center"
-                    >
-                      {bannerSaving ? <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div> : 'Save'}
-                    </button>
+                    <div className="flex-1">
+                      <GradientButton 
+                        onClick={handleClearBanner}
+                        variant="secondary"
+                        fullWidth={true}
+                      >
+                        Clear
+                      </GradientButton>
+                    </div>
+                    <div className="flex-1">
+                      <GradientButton 
+                        onClick={handleSaveBanner}
+                        disabled={bannerSaving}
+                        variant="primary"
+                        fullWidth={true}
+                      >
+                        <div className="flex justify-center items-center">
+                          {bannerSaving ? <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div> : 'Save'}
+                        </div>
+                      </GradientButton>
+                    </div>
                  </div>
                </div>
              )}

@@ -20,18 +20,18 @@ export default function FooterGlow() {
           transition: all 0.3s;
         }
       `}</style>
-      
+
       <div className="pointer-events-none absolute top-0 left-1/2 z-0 h-full w-full -translate-x-1/2 select-none">
-        <div 
+        <div
           className="absolute -top-32 left-1/4 h-72 w-72 rounded-full blur-3xl"
           style={{ background: '#C08552', opacity: 0.15 }}
         ></div>
-        <div 
+        <div
           className="absolute right-1/4 -bottom-24 h-80 w-80 rounded-full blur-3xl"
           style={{ background: '#C08552', opacity: 0.15 }}
         ></div>
       </div>
-      
+
       <div className="coffee-glass relative mx-auto flex max-w-6xl flex-col gap-8 px-6 py-10 md:flex-row md:items-start md:justify-between md:gap-12">
         {/* LEFT COLUMN - Brand */}
         <div className="flex flex-col gap-4 md:w-1/3">
@@ -69,7 +69,7 @@ export default function FooterGlow() {
             <div className="flex flex-col gap-2 text-sm text-[#FFF8F0]/70">
               <a href="#hero" className="hover:text-[#C08552] transition-colors">Home</a>
               <Link href="/menu" className="hover:text-[#C08552] transition-colors">Menu</Link>
-              <a href="#pricing" className="hover:text-[#C08552] transition-colors">Pricing</a>
+              <a href="#gallery" className="hover:text-[#C08552] transition-colors">Gallery</a>
               <a href="#contact" className="hover:text-[#C08552] transition-colors">Contact</a>
             </div>
           </div>
